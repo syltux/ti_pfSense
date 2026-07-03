@@ -32,10 +32,12 @@ FreeBSD vs Linux: FreeBSD, jusqu'à version 13, pas fourni avec environnement de
 | Performances | plus rapide |  |
 | Sécurité |  |  |
 | Fonctionnalités |  |  |
+| Gestion des paquets | APT | PKG |
+| Usage |  serveurs/evts d'entreprise | pare-feux/serveurs Web  |
 
 Licence BSD = Berkeley Software Distribution License
 
-sdsdsdsd
+FreeBSD est un SE UNIX open-source basé sur la base de code BSD
 
 
 
@@ -67,6 +69,7 @@ Documentation officielle pfSense:
 Stateful vs Stateless:
 
 https://www.redhat.com/fr/topics/cloud-native-apps/stateful-vs-stateless
+https://www.fortinet.com/fr/resources/cyberglossary/stateful-vs-stateless-firewall
 
 Le projet m0n0wall!
 https://m0n0.ch/wall/index.php
@@ -85,6 +88,8 @@ https://systeme.developpez.com/actu/313566/FreeBSD-peut-il-vraiment-etre-conside
 
 Comprendre les différences fondamentales entre Linux et FreeBSD
 https://goodtech.info/quelles-sont-les-differences-entre-linux-et-freebsd/
+https://serverspace.io/fr/about/blog/freebsd-vs-linux-comparison/
+
 
 QU'est ce que la licence BSD ?
 
@@ -95,6 +100,8 @@ Licence GNU GPL v3:
 https://www.gnu.org/licenses/gpl-3.0.html
 
 
+Codebase Berkeley:
+https://codebase.studentorg.berkeley.edu/
 
 
 
