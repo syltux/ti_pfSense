@@ -3,7 +3,7 @@
 ## 0. Topologie réseau à réaliser
 
 ```mermaid
-graph TD
+flowchart TD
     %% Définition du style général
     classDef wan style fill:#f9f,stroke:#333,stroke-width:2px;
     classDef pfsense style fill:#bbf,stroke:#333,stroke-width:3px,stroke-dasharray: 5 5;
@@ -20,39 +20,39 @@ graph TD
         pfsense[🔥 Pare-feu pfSense <br/> FreeBSD / Stateful]
     end
 
-    %% Zone LAN Entreprise
-    subgraph LAN_ZONE [Zone Interne - LAN]
-        direction TB
-        vSwitchLAN[🔌 Segment: LAN-Entreprise]
-        ClientDebian[💻 Client Debian 12 <br/> IP: DHCP 192.168.10.X]
-        PortailCaptif[🔒 Filtrage: Portail Captif <br/> & Proxy SquidGuard]
-    end
-
     %% Zone DMZ Serveurs
     subgraph DMZ_ZONE [Zone Isolée - DMZ]
         direction TB
-        vSwitchDMZ[🔌 Segment: DMZ-Serveurs]
-        ServerDebian[🖧 Serveur Debian 12 CLI <br/> Nginx & Bind9 <br/> IP Statique: 10.0.0.1]
+        vSwitchDMZ[🔌 Segment DMZ: 10.0.0.0/24]
+        ServerDebian[🖧 Serveur Nginx+Bind9 <br/> IP Statique: 10.0.0.1]
     end
 
-    %% Interconnexions et Flux Network
+    %% Zone LAN Entreprise
+    subgraph LAN_ZONE [Zone Interne - LAN]
+        direction TB
+        vSwitchLAN[🔌 Segment LAN: 192.168.10.0/24]
+        Filtres[🔒 Portail Captif / SquidGuard]
+        ClientDebian[💻 Client <br/> IP: DHCP 192.168.10.X]
+    end
+
+    %% Liens Physiques (Câblage)
     Internet --- |em0: Bridge Pont| pfsense
-    pfsense --- |em1: Gateway 192.168.10.254| vSwitchLAN
-    vSwitchLAN --- PortailCaptif
-    PortailCaptif --- ClientDebian
+    pfsense === |em1: Gateway 192.168.10.254| vSwitchLAN
+    pfsense === |em2: Gateway 10.0.0.254| vSwitchDMZ
     
-    pfsense --- |em2: Gateway 10.0.0.254| vSwitchDMZ
+    vSwitchLAN --- Filtres
+    Filtres --- ClientDebian
     vSwitchDMZ --- ServerDebian
 
     %% Liens logiques de sécurité (ACLs)
-    ClientDebian -.->|1. Autorisé après Auth Web| Internet
-    Internet ==>|2. NAT Port Forward 80| ServerDebian
-    ServerDebian x-.-x|3. INTERDIT| LAN_ZONE
+    Internet -.->|NAT Port Forward 80| ServerDebian
+    ClientDebian -.->|Autorisé après Auth| Internet
+    ServerDebian -.-x|INTERDIT vers LAN| LAN_ZONE
 
     %% Application des styles
     class Internet wan;
     class pfsense pfsense;
-    class vSwitchLAN,ClientDebian,PortailCaptif lan;
+    class vSwitchLAN,ClientDebian,Filtres lan;
     class vSwitchDMZ,ServerDebian dmz;
 ```
 
