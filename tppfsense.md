@@ -3,7 +3,7 @@
 ## 0. Topologie réseau à réaliser
 
 ```mermaid
-flowchart TD
+flowchart LR
     %% Définition du style général
     classDef wan style fill:#f9f,stroke:#333,stroke-width:2px;
     classDef pfsense style fill:#bbf,stroke:#333,stroke-width:3px,stroke-dasharray: 5 5;
@@ -20,34 +20,34 @@ flowchart TD
         pfsense[🔥 Pare-feu pfSense <br/> FreeBSD / Stateful]
     end
 
-    %% Zone DMZ Serveurs
-    subgraph DMZ_ZONE [Zone Isolée - DMZ]
-        direction TB
-        vSwitchDMZ[🔌 Segment DMZ: 10.0.0.0/24]
-        ServerDebian[🖧 Serveur Nginx+Bind9 <br/> IP Statique: 10.0.0.1]
-    end
-
     %% Zone LAN Entreprise
     subgraph LAN_ZONE [Zone Interne - LAN]
         direction TB
         vSwitchLAN[🔌 Segment LAN: 192.168.10.0/24]
         Filtres[🔒 Portail Captif / SquidGuard]
         ClientDebian[💻 Client <br/> IP: DHCP 192.168.10.X]
+        
+        vSwitchLAN --- Filtres --- ClientDebian
     end
 
-    %% Liens Physiques (Câblage)
+    %% Zone DMZ Serveurs
+    subgraph DMZ_ZONE [Zone Isolée - DMZ]
+        direction TB
+        vSwitchDMZ[🔌 Segment DMZ: 10.0.0.0/24]
+        ServerDebian[🖧 Serveur Nginx+Bind9 <br/> IP Statique: 10.0.0.1]
+        
+        vSwitchDMZ --- ServerDebian
+    end
+
+    %% Câblage physique horizontal limpide
     Internet --- |em0: Bridge Pont| pfsense
     pfsense === |em1: Gateway 192.168.10.254| vSwitchLAN
     pfsense === |em2: Gateway 10.0.0.254| vSwitchDMZ
-    
-    vSwitchLAN --- Filtres
-    Filtres --- ClientDebian
-    vSwitchDMZ --- ServerDebian
 
-    %% Liens logiques de sécurité (ACLs)
-    Internet -.->|NAT Port Forward 80| ServerDebian
+    %% Contrôles logiques (ACLs)
     ClientDebian -.->|Autorisé après Auth| Internet
-    ServerDebian -.-x|INTERDIT vers LAN| LAN_ZONE
+    Internet -.->|NAT Port Forward 80| ServerDebian
+    ServerDebian x-.-x|INTERDIT vers LAN| LAN_ZONE
 
     %% Application des styles
     class Internet wan;
