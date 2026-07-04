@@ -2,6 +2,7 @@
 
 ## 0. Topologie réseau à réaliser
 
+```mermaid
 graph TD
     %% Définition du style général
     classDef wan style fill:#f9f,stroke:#333,stroke-width:2px;
@@ -53,6 +54,7 @@ graph TD
     class pfsense pfsense;
     class vSwitchLAN,ClientDebian,PortailCaptif lan;
     class vSwitchDMZ,ServerDebian dmz;
+    ```
 
 ## 1. Objectifs du Travaux Pratiques
 À l'issue de ce TP, l'étudiant sera capable de :
