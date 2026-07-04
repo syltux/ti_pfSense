@@ -255,3 +255,7 @@ https://codebase.studentorg.berkeley.edu/
 Formation pfSense
 https://www.youtube.com/watch?v=R0BT38ZCY88&list=PL1aYsXmhJ1Wc0cTtvo4b-L9cx4c9NCMo3
 https://www.youtube.com/watch?v=Vmd9Amz524U
+
+Filtrage par catégories avec Squid Guard
+
+https://www.it-connect.fr/pfsense-et-squid-ajouter-le-filtrage-par-categories-avec-squid-guard/
