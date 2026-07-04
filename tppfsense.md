@@ -17,7 +17,7 @@ graph TD
 
     %% Le Coeur de l'infra : pfSense
     subgraph FIREWALL [Périmètre de Sécurité]
-        pfsense[🔥 Pare-feu pfSense <br/> FreeBSD 12 / Stateful]
+        pfsense[🔥 Pare-feu pfSense <br/> FreeBSD / Stateful]
     end
 
     %% Zone LAN Entreprise
@@ -36,18 +36,18 @@ graph TD
     end
 
     %% Interconnexions et Flux Network
-    Internet <=>|em0: Bridge Pont| pfsense
-    pfsense <=>|em1: Gateway 192.168.10.254| vSwitchLAN
+    Internet --- |em0: Bridge Pont| pfsense
+    pfsense --- |em1: Gateway 192.168.10.254| vSwitchLAN
     vSwitchLAN --- PortailCaptif
     PortailCaptif --- ClientDebian
     
-    pfsense <=>|em2: Gateway 10.0.0.254| vSwitchDMZ
+    pfsense --- |em2: Gateway 10.0.0.254| vSwitchDMZ
     vSwitchDMZ --- ServerDebian
 
     %% Liens logiques de sécurité (ACLs)
     ClientDebian -.->|1. Autorisé après Auth Web| Internet
-    Internet -.->|2. NAT Port Forward 80| ServerDebian
-    ServerDebian -.-x|3. INTERDIT explicitement| LAN_ZONE
+    Internet ==>|2. NAT Port Forward 80| ServerDebian
+    ServerDebian x-.-x|3. INTERDIT| LAN_ZONE
 
     %% Application des styles
     class Internet wan;
